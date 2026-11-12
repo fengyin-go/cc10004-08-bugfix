@@ -5,7 +5,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 
-from app.schemas import ActionResult, EntryPayload, PageResult
+from app.schemas import ActionResult, EntryPayload, PageResult, extract_action
 from app.services.chart import ChartService
 
 router = APIRouter(prefix="/api/chart", tags=["可视化图表"])
@@ -51,7 +51,7 @@ def create_entry(payload: EntryPayload) -> ActionResult:
 @router.post("/{entry_id}/actions", response_model=ActionResult)
 def run_action(entry_id: int, payload: EntryPayload) -> ActionResult:
     """对单条图表配置执行提交发布、发布图表、下线图表；不允许的动作会被拦下并说明原因。"""
-    action = str(payload.values.get("action") or "").strip()
+    action = extract_action(payload)
     entry, message = service.run_action(entry_id, action)
     if entry is None:
         return ActionResult(ok=False, message=message)

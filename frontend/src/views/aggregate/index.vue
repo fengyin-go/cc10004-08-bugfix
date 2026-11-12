@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-import { request } from '@/api/client'
+import { postAction, request } from '@/api/client'
 
 type Row = Record<string, string | number | null>
 
@@ -97,16 +97,10 @@ function openCreate() {
 async function runAction(action: string, row: Row) {
   errorMessage.value = ''
   try {
-    const response = await request(`${ENDPOINT}/${row.id}/actions`, {
-      method: 'POST',
-      body: JSON.stringify({ action }),
-    })
-    if (!response.ok) {
-      throw new Error('聚合计算动作未生效，请稍后重试')
-    }
+    await postAction(`${ENDPOINT}/${row.id}/actions`, action)
     await reload()
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : '聚合计算操作失败'
+    errorMessage.value = error instanceof Error ? error.message : '操作失败'
   }
 }
 

@@ -33,3 +33,29 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.muted { color: var(--muted); }
+.status-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; white-space: nowrap; }
+.status-done { background: #e7f6ec; color: #067647; }
+.status-failed { background: #fdecec; color: #b42318; }
+.status-running { background: #e8f0fe; color: #1f6feb; }
+.status-idle { background: #f1f5f9; color: #475569; }
+.cell-line { margin: 2px 0; }
+.drawer-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: flex; justify-content: flex-end; z-index: 20; }
+.drawer { width: 560px; max-width: 92vw; height: 100%; background: #fff; display: flex; flex-direction: column; box-shadow: -8px 0 24px rgba(15, 23, 42, 0.18); }
+.drawer-sm { width: 420px; }
+.drawer-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 16px; border-bottom: 1px solid var(--border); }
+.drawer-head h3 { margin: 0 0 4px; font-size: 16px; }
+.drawer-body { padding: 16px; overflow-y: auto; }
+.round-card { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fbfdff; }
+.round-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+.proof-line { font-size: 13px; margin: 6px 0; }
+.event-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.event-list li { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; font-size: 12px; padding: 6px 8px; border-radius: 6px; background: #f8fafc; }
+.event-list li.event-blocked { background: #fef3f2; }
+.event-time { color: var(--muted); font-variant-numeric: tabular-nums; }
+.event-action { font-weight: 600; }
+.event-ok { color: #067647; }
+.event-no { color: #b42318; font-weight: 600; }
+.event-reason { flex-basis: 100%; color: #b42318; }
+.bind-form { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.bind-form .filter-item input { padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; min-width: 240px; }

@@ -5,7 +5,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 
-from app.schemas import ActionResult, EntryPayload, PageResult
+from app.schemas import ActionResult, EntryPayload, PageResult, extract_action
 from app.services.notify import NotifyService
 
 router = APIRouter(prefix="/api/notify", tags=["通知分发"])
@@ -51,7 +51,7 @@ def create_entry(payload: EntryPayload) -> ActionResult:
 @router.post("/{entry_id}/actions", response_model=ActionResult)
 def run_action(entry_id: int, payload: EntryPayload) -> ActionResult:
     """对单条通知规则执行提交校验、启用通知、停用通知；不允许的动作会被拦下并说明原因。"""
-    action = str(payload.values.get("action") or "").strip()
+    action = extract_action(payload)
     entry, message = service.run_action(entry_id, action)
     if entry is None:
         return ActionResult(ok=False, message=message)

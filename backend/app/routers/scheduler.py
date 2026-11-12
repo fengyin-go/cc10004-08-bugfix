@@ -5,7 +5,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 
-from app.schemas import ActionResult, EntryPayload, PageResult
+from app.schemas import ActionResult, EntryPayload, PageResult, extract_action
 from app.services.scheduler import SchedulerService
 
 router = APIRouter(prefix="/api/scheduler", tags=["调度管理"])
@@ -50,8 +50,18 @@ def create_entry(payload: EntryPayload) -> ActionResult:
 
 @router.post("/{entry_id}/actions", response_model=ActionResult)
 def run_action(entry_id: int, payload: EntryPayload) -> ActionResult:
-    """对单条调度配置执行提交校验、启用调度、停用调度；不允许的动作会被拦下并说明原因。"""
-    action = str(payload.values.get("action") or "").strip()
+    """对单条调度配置执行提交校验、启用调度、停用调度；不允许的动作会被拦下并说明原因。
+
+    也接受动作「绑定节点」：此时 values.node_id（或顶层 node_id）给出关联流水线节点 id。
+    业务拒绝仍返回 200 + ok=False，前端需展示 message 而不是吞掉。
+    """
+    action = extract_action(payload)
+    if action == "绑定节点":
+        node_id = payload.values.get("node_id") or getattr(payload, "node_id", None)
+        entry, message = service.bind_node(entry_id, node_id)
+        if entry is None:
+            return ActionResult(ok=False, message=message)
+        return ActionResult(ok=True, message=message, entry=entry)
     entry, message = service.run_action(entry_id, action)
     if entry is None:
         return ActionResult(ok=False, message=message)
